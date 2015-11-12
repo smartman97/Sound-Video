@@ -1,11 +1,15 @@
 package ctec.soundvideo;
 
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.widget.*;
 import android.view.View;
 import android.media.MediaPlayer;
+
+import java.util.ArrayList;
 
 public class SoundActivity extends AppCompatActivity implements Runnable
 {
@@ -16,6 +20,8 @@ public class SoundActivity extends AppCompatActivity implements Runnable
     private MediaPlayer soundPlayer;
     private SeekBar soundSeekBar;
     private Thread soundThread;
+    private Spinner soundSpinner;
+    private ArrayList<Integer> soundList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -29,6 +35,14 @@ public class SoundActivity extends AppCompatActivity implements Runnable
         videoButton = (Button) findViewById(R.id.videoButton);
         soundSeekBar = (SeekBar) findViewById(R.id.soundSeekBar);
         soundPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.halloweensounds);
+        soundSpinner = (Spinner) findViewById(R.id.soundSpinner);
+
+        soundList = new ArrayList<Integer>();
+        soundList.add(R.raw.halloweensounds);
+        soundList.add(R.raw.halloweenmidnight);
+        soundList.add(R.raw.epicjourney);
+
+        loadSpinner();
 
         setupListeners();
 
@@ -37,8 +51,29 @@ public class SoundActivity extends AppCompatActivity implements Runnable
 
     }
 
+    private void loadSpinner()
+    {
+        ArrayAdapter<Integer> listAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, soundList);
+        listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        soundSpinner.setAdapter(listAdapter);
+    }
+
     public void setupListeners()
     {
+        soundSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
+            {
+                soundPlayer.stop();
+                int selectedSoundR = Integer.parseInt(soundSpinner.getSelectedItem().toString());
+                soundPlayer = MediaPlayer.create(getBaseContext(), selectedSoundR);
+            }
+
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+                soundPlayer = MediaPlayer.create(getBaseContext(), null);
+            }
+        });
         playButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -57,9 +92,11 @@ public class SoundActivity extends AppCompatActivity implements Runnable
             }
         });
 
-        stopButton.setOnClickListener(new View.OnClickListener() {
+        stopButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 soundPlayer.stop();
                 soundPlayer = MediaPlayer.create(getBaseContext(), R.raw.halloweensounds);
             }
@@ -75,23 +112,29 @@ public class SoundActivity extends AppCompatActivity implements Runnable
             }
         });
 
-        soundSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        soundSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+            public void onStartTrackingTouch(SeekBar seekBar)
+            {
             }
 
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+            {
+                if (fromUser)
+                {
                     soundPlayer.seekTo(progress);
                 }
             }
         });
     }
+
 
     @Override
     public void run()
@@ -106,12 +149,10 @@ public class SoundActivity extends AppCompatActivity implements Runnable
             {
                 Thread.sleep(300);
                 currentPosition = soundPlayer.getCurrentPosition();
-            }
-            catch(InterruptedException soundException)
+            } catch (InterruptedException soundException)
             {
                 return;
-            }
-            catch(Exception otherException)
+            } catch (Exception otherException)
             {
                 return;
             }

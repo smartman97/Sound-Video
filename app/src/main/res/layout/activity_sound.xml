@@ -5,7 +5,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="ctec.soundvideo.SoundActivity">
+    tools:context="ctec.soundvideo.SoundActivity"
+    android:background="#5e5e5e">
 
     <Button
         android:layout_width="wrap_content"
@@ -21,10 +22,10 @@
         android:layout_height="wrap_content"
         android:text="play"
         android:id="@+id/playButton"
+        android:layout_marginBottom="42dp"
         android:layout_above="@+id/videoButton"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="84dp" />
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -47,9 +48,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/soundSeekBar"
-        android:layout_centerVertical="true"
+        android:layout_above="@+id/playButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/stopButton"
-        android:layout_alignEnd="@+id/stopButton" />
+        android:layout_marginBottom="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/soundSpinner"
+        android:layout_above="@+id/soundSeekBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="22dp" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imageView"
+        android:src="@drawable/happyhalloween"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/soundSpinner" />
 </RelativeLayout>
